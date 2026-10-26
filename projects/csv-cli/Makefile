@@ -10,7 +10,7 @@ test:
 	go test -v ./...
 
 clean:
-	rm -f csv-cli
+	del /Q csv-cli
 
 db-up:
 	docker run --name pg -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres:16
@@ -23,3 +23,6 @@ db-start:
 
 db-shell:
 	docker exec -it pg psql -U postgres
+
+stats:
+	go run . --stats

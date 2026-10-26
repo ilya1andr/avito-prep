@@ -1,16 +1,10 @@
-\# csv-cli
-
-
+# csv-cli
 
 CLI-утилита на Go для чтения CSV-файлов.
 
-
-
-\## Что делает
-
-
-
-Принимает путь к CSV-файлу, парсит его и печатает содержимое в stdout.
+## Что делает
+1. Читает CSV-файл и сохраняет данные в базу данных PostgreSQL.
+2. Умеет делать SQL-запрос с агрегацией (`GROUP BY`) и выводить статистику (количество людей и средний возраст по городам).
 
 ## Требования
 
@@ -18,56 +12,49 @@ CLI-утилита на Go для чтения CSV-файлов.
 - Docker (для запуска PostgreSQL)
 
 
-\## Установка
+## Установка
 
-
-
+```bash
 git clone https://github.com/ilya1andr/avito-prep.git
-
 cd avito-prep/projects/csv-cli
-
 make build
-
-
+```
 
 ## Использование
 
 1. Запустите базу данных в Docker:
    ```bash
    docker run --name pg -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres:16
+   ```
 
-./csv-cli data.csv
+2. Создайте таблицу (зайдите в psql через docker exec -it pg psql -U postgres):
+   ```sql
+   CREATE TABLE people (id SERIAL PRIMARY KEY, name TEXT, age INT, city TEXT);
+   ```
 
+3. Загрузка данных:
+   ```bash
+   go run . data.csv
+   ```
 
-
-Вывод:
-
-name | age | city
-
-Alice | 30 | Moscow
-
-
-
-\## Тесты
-
-
-
-go test -v ./…
+4. Просмотр статистики
+   ```bash
+   go run . --stats
+   ```
 
 
+## Тесты
+```bash
+go test -v ./...
+```
 
-\## Команды Make
+## Команды Make
 
-
-
-\- `make build` — собрать бинарник
-
-\- `make run` — запустить на data.csv
-
-\- `make test` — тесты
-
-\- `make clean` — удалить бинарник
-
+- `make build` — собрать бинарник
+- `make run` — запустить на `data.csv`
+- `make test` — тесты
+- `make clean` — удалить бинарник
+- `make stats` — запустить вывод статистики
 
 ## Переменные окружения
 
