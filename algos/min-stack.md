@@ -1,4 +1,4 @@
-\# Min Stack (LeetCode 155)
+# Min Stack (LeetCode 155)
 
 
 
@@ -8,7 +8,7 @@
 
 
 
-\## Условие
+## Условие
 
 Реализовать стек с push/pop/top/getMin за O(1).
 
@@ -16,7 +16,7 @@ getMin возвращает минимум всего стека.
 
 
 
-\## Решение
+## Решение
 
 
 
@@ -24,43 +24,33 @@ getMin возвращает минимум всего стека.
 
 class MinStack(object):
 
-&#x20;   def \_\_init\_\_(self):
-
-&#x20;       self.stack = \[]
-
-&#x20;       self.min\_stack = \[]
+   def __init__(self):
+       self.stack = []
+       self.min_stack = []
 
 
 
-&#x20;   def push(self, value):
-
-&#x20;       self.stack.append(value)
-
-&#x20;       if not self.min\_stack or value <= self.min\_stack\[-1]:
-
-&#x20;           self.min\_stack.append(value)
-
-&#x20;       else:
-
-&#x20;           self.min\_stack.append(self.min\_stack\[-1])
+   def push(self, value):
+       self.stack.append(value)
+       if not self.min_stack or value <= self.min_stack[-1]:
+           self.min_stack.append(value)
+       else:
+           self.min_stack.append(self.min_stack[-1])
 
 
 
-&#x20;   def pop(self):
-
-&#x20;       self.stack.pop()
-
-&#x20;       self.min\_stack.pop()
+   def pop(self):
+       self.stack.pop()
+       self.min_stack.pop()
 
 
 
-&#x20;   def top(self):
-
-&#x20;       return self.stack\[-1]
-
+   def top(self):
+       return self.stack[-1]
 
 
-&#x20;   def getMin(self):
 
-&#x20;       return self.min\_stack\[-1]
+   def getMin(self):
+       return self.min_stack[-1]
+   ```
 
