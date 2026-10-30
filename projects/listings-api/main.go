@@ -21,20 +21,18 @@ func main() {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
 	defer conn.Close(ctx)
-	
+
 	repo := repository.NewListingRepository(conn)
 	svc := service.NewListingService(repo)
 	h := handler.NewListingHandler(svc)
 
 	mux := http.NewServeMux()
-	
+
 	mux.HandleFunc("POST /listings", h.CreateListing)
 
-	mux.HandleFunc("GET /listings", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status": "ok"}`))
-	})
+	mux.HandleFunc("GET /listings", h.GetListingsHandler)
+
+	mux.HandleFunc("GET /listings/{id}", h.GetListingHandlerByID)
 
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

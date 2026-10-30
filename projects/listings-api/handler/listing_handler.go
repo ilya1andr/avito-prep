@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/ilya1andr/avito-prep/projects/listings-api/service"
+	"github.com/jackc/pgx/v5"
 )
 
 type ListingHandler struct {
@@ -36,4 +38,34 @@ func (h *ListingHandler) CreateListing(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(createdListing)
+}
+
+func (h *ListingHandler) GetListingsHandler(w http.ResponseWriter, r *http.Request) {
+	listing, err := h.svc.GetListings(r.Context())
+	if err != nil {
+		http.Error(w, "Error getting listings", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(listing)
+}
+
+func (h *ListingHandler) GetListingHandlerByID(w http.ResponseWriter, r *http.Request) {
+	c
+
+	listing, err := h.svc.GetListingByID(r.Context(), id)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			http.Error(w, "Not found", http.StatusNotFound)
+			return
+		}
+		http.Error(w, "Server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(listing)
 }
