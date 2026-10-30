@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/ilya1andr/avito-prep/projects/listings-api/service"
 	"github.com/jackc/pgx/v5"
@@ -53,7 +54,12 @@ func (h *ListingHandler) GetListingsHandler(w http.ResponseWriter, r *http.Reque
 }
 
 func (h *ListingHandler) GetListingHandlerByID(w http.ResponseWriter, r *http.Request) {
-	c
+	idStr := r.PathValue("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Incorrect ID", http.StatusBadRequest)
+		return
+	}
 
 	listing, err := h.svc.GetListingByID(r.Context(), id)
 	if err != nil {
