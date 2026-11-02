@@ -1,4 +1,4 @@
-\# Longest Substring Without Repeating Characters (LeetCode 3)
+# Longest Substring Without Repeating Characters (LeetCode 3)
 
 
 
@@ -8,7 +8,7 @@
 
 
 
-\## Условие
+## Условие
 
 Дана строка `s`. Нужно найти длину самой длинной подстроки, 
 
@@ -16,7 +16,7 @@
 
 
 
-\## Решение (O(n))
+## Решение (O(n))
 
 
 
@@ -24,23 +24,23 @@
 
 class Solution(object):
 
-&#x20;   def lengthOfLongestSubstring(self, s):
+   def lengthOfLongestSubstring(self, s):
 
-&#x20;       indx = {}
+       indx = {}
 
-&#x20;       l = 0
+       l = 0
 
-&#x20;       mx = 0
+       mx = 0
 
-&#x20;       for r in range(len(s)):
+       for r in range(len(s)):
 
-&#x20;           if s\[r] in indx and indx\[s\[r]] >= l:
+           if s[r] in indx and indx[s[r]] >= l:
 
-&#x20;               l = indx\[s\[r]] + 1
+               l = indx[s[r]] + 1
 
-&#x20;           indx\[s\[r]] = r
+           indx[s[r]] = r
 
-&#x20;           mx = max(mx, r - l + 1)
+           mx = max(mx, r - l + 1)
 
-&#x20;       return mx
-
+       return mx
+```

@@ -1,4 +1,4 @@
-\# String to Integer (atoi) (LeetCode 8)
+# String to Integer (atoi) (LeetCode 8)
 
 
 
@@ -8,23 +8,23 @@
 
 
 
-\## Условие
+## Условие
 
 Реализовать функцию myAtoi(string s), которая преобразует строку в 32-битное целое число.
 
 Правила:
 
-1\. Игнорировать пробелы в начале.
+1. Игнорировать пробелы в начале.
 
-2\. Учесть знак '+' или '-'.
+2. Учесть знак '+' или '-'.
 
-3\. Читать цифры, пока не встретится нецифровой символ.
+3. Читать цифры, пока не встретится нецифровой символ.
 
-4\. Если число выходит за пределы \[-2^31, 2^31 - 1], вернуть граничное значение.
+4. Если число выходит за пределы [-2^31, 2^31 - 1], вернуть граничное значение.
 
 
 
-\## Решение
+## Решение
 
 
 
@@ -32,73 +32,73 @@
 
 class Solution(object):
 
-&#x20;   def myAtoi(self, s):
+   def myAtoi(self, s):
 
-&#x20;       if len(s) == 0: 
+       if len(s) == 0: 
 
-&#x20;           return 0
+           return 0
 
-&#x20;       
+       
 
-&#x20;       i, n = 0, len(s)
+       i, n = 0, len(s)
 
-&#x20;       while i < n and s\[i] == ' ':
+       while i < n and s[i] == ' ':
 
-&#x20;           i += 1
+           i += 1
 
-&#x20;       if i == n: 
+       if i == n: 
 
-&#x20;           return 0
+           return 0
 
-&#x20;       
+       
 
-&#x20;       sign = 1
+       sign = 1
 
-&#x20;       if s\[i] == '-':
+       if s[i] == '-':
 
-&#x20;           sign = -1
+           sign = -1
 
-&#x20;           i += 1
+           i += 1
 
-&#x20;       elif s\[i] == '+':
+       elif s[i] == '+':
 
-&#x20;           i += 1
+           i += 1
 
-&#x20;           
+           
 
-&#x20;       ans = 0
+       ans = 0
 
-&#x20;       while i < n and s\[i].isdigit():
+       while i < n and s[i].isdigit():
 
-&#x20;           ans = ans \* 10 + int(s\[i])
+           ans = ans * 10 + int(s[i])
 
-&#x20;           i += 1  
+           i += 1  
 
-&#x20;           
+           
 
-&#x20;       ans \*= sign
+       ans *= sign
 
-&#x20;       INT\_MAX = 2\*\*31 - 1
+       INT_MAX = 2**31 - 1
 
-&#x20;       INT\_MIN = -(2\*\*31)
+       INT_MIN = -(2**31)
 
-&#x20;       
+       
 
-&#x20;       if ans > INT\_MAX: 
+       if ans > INT_MAX: 
 
-&#x20;           return INT\_MAX
+           return INT_MAX
 
-&#x20;       elif ans < INT\_MIN: 
+       elif ans < INT_MIN:
+           return INT_MIN
 
-&#x20;           return INT\_MIN
+           
 
-&#x20;           
-
-&#x20;       return ans
-
+       return ans
+   ```
 
 
-\## Ключевая идея
+
+## Ключевая идея
 
 Пошаговая симуляция:
 
@@ -112,7 +112,7 @@ class Solution(object):
 
 
 
-В цикле собираем число: ans = ans \* 10 + int(s\[i]). И не забываем i += 1, иначе будет бесконечный цикл.
+В цикле собираем число: ans = ans * 10 + int(s[i]). И не забываем i += 1, иначе будет бесконечный цикл.
 
 
 
