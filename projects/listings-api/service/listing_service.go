@@ -34,6 +34,39 @@ func (s *ListingService) CreateListing(ctx context.Context, title string, price 
 	return s.repo.Create(ctx, title, price)
 }
 
+func (s *ListingService) CreateListingWithTx(ctx context.Context, title string, price int) (*repository.Listing, error) {
+	title = strings.TrimSpace(title)
+	if title == "" {
+		return nil, errors.New("название не может быть пустым")
+	}
+	if len(title) > 100 {
+		return nil, errors.New("название не может быть длиннее 100 символов")
+	}
+	if price <= 0 {
+		return nil, errors.New("цена должна быть больше нуля")
+	}
+	if price > 10000000 {
+		return nil, errors.New("цена не может быть больше 10 000 000")
+	}
+
+	tx, err := s.repo.BeginTx(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	defer tx.Rollback(ctx)
+
+	listing, err := s.repo.CreateWithTx(ctx, tx, title, price)
+	if err != nil {
+		return nil, err
+	}
+	if err := tx.Commit(ctx); err != nil {
+		return nil, err
+	}
+
+	return listing, nil
+}
+
 func (s *ListingService) GetListingByID(ctx context.Context, id int) (*repository.Listing, error) {
 	if id <= 0 {
 		return nil, errors.New("ID должен быть положительным")

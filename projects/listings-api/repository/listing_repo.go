@@ -37,6 +37,23 @@ func (r *ListingRepository) Create(ctx context.Context, title string, price int)
 	return &l, nil
 }
 
+func (r *ListingRepository) CreateWithTx(ctx context.Context, tx pgx.Tx, title string, price int) (*Listing, error) {
+	query := `INSERT INTO listings (title, price) VALUES ($1, $2) RETURNING id, title, price`
+	var l Listing
+	err := tx.QueryRow(ctx, query, title, price).Scan(&l.ID, &l.Title, &l.Price)
+	if err != nil {
+		return nil, err
+	}
+
+	logQuery := `INSERT INTO audit_logs (action, listing_id) VALUES ($1, $2)`
+	_, err = tx.Exec(ctx, logQuery, "create_listing", l.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &l, nil
+}
+
 func (r *ListingRepository) GetAll(ctx context.Context, minPrice *int, maxPrice *int) ([]Listing, error) {
 	query := "SELECT id, title, price FROM listings"
 
@@ -117,10 +134,16 @@ func (r *ListingRepository) Delete(ctx context.Context, id int) error {
 	return nil
 }
 
+func (r *ListingRepository) BeginTx(ctx context.Context) (pgx.Tx, error) {
+	return r.db.Begin(ctx)
+}
+
 type ListingRepositoryInterface interface {
 	Create(ctx context.Context, title string, price int) (*Listing, error)
 	GetAll(ctx context.Context, minPrice *int, maxPrice *int) ([]Listing, error)
 	GetByID(ctx context.Context, id int) (*Listing, error)
 	Update(ctx context.Context, id int, title string, price int) (*Listing, error)
 	Delete(ctx context.Context, id int) error
+	BeginTx(ctx context.Context) (pgx.Tx, error)
+	CreateWithTx(ctx context.Context, tx pgx.Tx, title string, price int) (*Listing, error)
 }

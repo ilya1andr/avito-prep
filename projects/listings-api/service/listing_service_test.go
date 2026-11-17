@@ -9,6 +9,11 @@ import (
 
 type mockRepo struct{}
 
+func (m *mockRepo) BeginTx(ctx context.context.Context)  (pgx.Tx, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (m *mockRepo) Create(ctx context.Context, title string, price int) (*repository.Listing, error) {
 	return &repository.Listing{ID: 1, Title: title, Price: price}, nil
 }
